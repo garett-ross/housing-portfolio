@@ -1,49 +1,58 @@
+<!-- Main app code -->
+
+<!-- HTML template for the app content -->
 <template>
   <div class="app-container">
-    <!-- Hero/Banner Section -->
+
     <div class="hero">
       <h1>Property Data Analysis</h1>
       <p>Explore property data with custom queries and visualizations.</p>
     </div>
 
-    <!-- Introductory Text -->
     <div class="intro">
       <p>Use the form below to filter property data by various criteria, such as price, date, and location. You can also add multiple queries to compare different data sets.</p>
     </div>
-    <!-- Query Boxes Section -->
+
+    <!-- Queries go here-->
     <div class="query-boxes">
-      <QueryBox v-for="(box, index) in queryBoxes" :key="index" @remove="removeQueryBox(index)" />
-      <button class="add-query-box" @click="addQueryBox">Add Query Box</button>
+      <QueryBox v-for="(box, index) in queryBoxes" :key="index" :index="index" @delete-query="deleteQueryBox"/>
+      <button class="add-query-box" @click="addQueryBox">Add A New Query</button>
     </div>
   </div>
 </template>
 
+<!-- Script to provide interactivity-->
 <script>
 
+// import querybox component 
 import QueryBox from './components/QueryBox.vue';
 
+// get the query box class
 export default {
   components: {
     QueryBox
   },
   data() {
     return {
-      queryBoxes: [1], // Initially one query box
+      queryBoxes: [1], // create one query box initially
     };
   },
+
   methods: {
     addQueryBox() {
       this.queryBoxes.push(this.queryBoxes.length + 1);
     },
-    removeQueryBox(index) {
-      this.queryBoxes.splice(index, 1);
+    // called from a click event within the query box component
+    deleteQueryBox(index) {
+      this.queryBoxes.splice(index, 1); // need to find specific box this has been called from!
     }
   }
 };
 </script>
 
+<!-- styles for the main app-->
 <style scoped>
-/* Ensure body and html take full height and remove default margins */
+
 html, body {
   height: 100%;
   margin: 0;
@@ -53,7 +62,7 @@ html, body {
 }
 
 
-/* Hero/Banner Section */
+
 .hero {
   width: 100%;
   background-image: url('path-to-your-banner-image.jpg');
@@ -74,7 +83,7 @@ html, body {
   margin: 10px 0 0;
 }
 
-/* Introductory Text */
+
 .intro {
   text-align: center;
   margin: 20px auto;
@@ -82,7 +91,7 @@ html, body {
   font-size: 1.1rem;
 }
 
-/* Query Boxes Section */
+
 .query-boxes {
   display: flex;
   flex-direction: column;

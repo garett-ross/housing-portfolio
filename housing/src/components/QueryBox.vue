@@ -1,7 +1,12 @@
 <template>
   <div class="query-box">
-    <form @submit.prevent="submitQuery">
+    <form @submit.prevent="submitQuery"> <!-- prevent reloading entire page -->
+      <!-- option to remove query box -->
+      <!-- used click.prevent to stop it trying to call the api when deleted -->
+      <button class="delete-query" @click.prevent="deleteSelf()">Delete Query</button>
+      <!-- multiple filters can be applied to each query, show options for each -->
       <div v-for="(filter, index) in filters" :key="index" class="filter-row">
+        <!-- attributes drop-down -->
         <select v-model="filter.field">
           <option value="price">Price</option>
           <option value="date">Date</option>
@@ -9,6 +14,7 @@
           <option value="town_city">Town or City</option>
           <option value="county">County</option>
         </select>
+        <!-- operator options -->
         <select v-model="filter.operator">
           <option value="eq">Equals</option>
           <option value="ne">Not Equals</option>
@@ -17,6 +23,7 @@
           <option value="ge">Greater Than or Equal To</option>
           <option value="le">Less Than or Equal To</option>
         </select>
+        <!-- value as free text - can this be variable? -->
         <input
           v-model="filter.value"
           type="text"
@@ -61,6 +68,9 @@ function monthlyAverages(groupedData) {
 }
 
 export default {
+  props: {
+    index: Number // index in parent array
+  },
   data() {
     return {
       filters: [{ field: '', operator: 'eq', value: '' }],
@@ -69,6 +79,9 @@ export default {
     };
   },
   methods: {
+    deleteSelf() {
+      this.$emit('delete-query', this.index)
+    },
     addFilter() {
       this.filters.push({ field: '', operator: 'eq', value: '' });
     },
@@ -133,7 +146,7 @@ export default {
 
 <style scoped>
 .query-box {
-  margin-top: 20px;
+  margin-top: 10px;
   border: 2px solid red; /* Changed to 'solid' for visibility */
 }
 .filter-row {
@@ -144,5 +157,13 @@ input[type="text"] {
 }
 button {
   margin-top: 10px;
+}
+
+/* this is a bit awkward */
+.delete-query {
+  position: relative;
+  left: 86%;
+  margin-top: 0px;
+  margin-right: 20px;
 }
 </style>
