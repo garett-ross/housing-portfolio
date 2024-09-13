@@ -1,9 +1,17 @@
 from flask import Blueprint, jsonify, request
-from sqlalchemy import and_, or_
+from sqlalchemy import and_, or_, select
 from .models import PPD
 from . import db
 
 api = Blueprint('api',__name__)
+
+#endpoint to fetch all data
+@api.route("/all", methods=["POST", "GET"])
+def all_data():
+    if request.method == 'GET':
+        results = db.session.execute(select(PPD)).scalars().all()
+        data = [item.to_dict() for item in results]
+        return jsonify(data)
 
 @api.route("/api", methods=["POST", "GET"])
 def handle_request():
@@ -48,3 +56,27 @@ def handle_request():
         data = [{'price': r[0], 'date': r[1]} for r in results]
         return jsonify(data)
 
+# endpoint to return unique values, used by front end to populate options
+@api.route("/unique", methods=["POST"])
+def unique_values():
+    if request.method == "POST":
+        request_data = request.get_json()
+        filters = request_data.get('filters', {})  # Current filter selections
+        col = request_data.get('db_header')       # Column for which unique values are requested
+
+        # Start a base query
+        query = db.session.query(getattr(PPD, col)).distinct()
+
+        # Apply the existing filters to limit results
+        if filters:
+            filter_conditions = []
+            for key, value in filters.items():
+                if hasattr(PPD, key):
+                    column = getattr(PPD, key)
+                    filter_conditions.append(column == value)
+            query = query.filter(and_(*filter_conditions))
+        query = query.order_by(getattr(PPD, col).asc())
+        # Fetch distinct values
+        unique_values = query.all()
+        values_list = [value[0] for value in unique_values]
+        return jsonify(values_list)

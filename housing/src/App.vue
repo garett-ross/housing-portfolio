@@ -1,9 +1,5 @@
-<!-- Main app code -->
-
-<!-- HTML template for the app content -->
 <template>
   <div class="app-container">
-
     <div class="hero">
       <h1>Property Data Analysis</h1>
       <p>Explore property data with custom queries and visualizations.</p>
@@ -15,44 +11,54 @@
 
     <!-- Queries go here-->
     <div class="query-boxes">
-      <QueryBox v-for="(box, index) in queryBoxes" :key="index" :index="index" @delete-query="deleteQueryBox"/>
+      <QueryBox
+        v-for="(box) in queryBoxes"
+        :key="box.id"
+        :id="box.id" 
+        @delete-query="deleteQueryBox"
+      />
       <button class="add-query-box" @click="addQueryBox">Add A New Query</button>
+    </div>
+    <div class="footer">
+      <ul class="socials">
+      <li class="social"><a href="https://www.linkedin.com/in/garett-ross/">LinkedIn</a></li>
+      <li class="social"><a href="https://github.com/garett-ross">GitHub</a></li>
+      </ul>
+      <br>
+      <p class="attribution">Price Paid data copyright HM Government, published for educational purposes under the Open Govenment Licence</p>
+      
     </div>
   </div>
 </template>
 
-<!-- Script to provide interactivity-->
 <script>
-
-// import querybox component 
 import QueryBox from './components/QueryBox.vue';
+import { v4 as uuid } from 'uuid';
 
-// get the query box class
 export default {
   components: {
-    QueryBox
+    QueryBox,
   },
   data() {
     return {
-      queryBoxes: [1], // create one query box initially
+      queryBoxes: [{ id: uuid() }], // Initialize with one query box with a unique ID
     };
   },
-
   methods: {
     addQueryBox() {
-      this.queryBoxes.push(this.queryBoxes.length + 1);
+      this.queryBoxes.push({ id: uuid() }); // Push a new object with a unique ID for each new query box
     },
-    // called from a click event within the query box component
-    deleteQueryBox(index) {
-      this.queryBoxes.splice(index, 1); // need to find specific box this has been called from!
-    }
-  }
+    // Delete query box by its ID
+    deleteQueryBox(id) {
+      // Filter out the box with the given id
+      this.queryBoxes = this.queryBoxes.filter(box => box.id !== id);
+    },
+  },
 };
 </script>
 
-<!-- styles for the main app-->
 <style scoped>
-
+/* Styling is unchanged */
 html, body {
   height: 100%;
   margin: 0;
@@ -61,7 +67,25 @@ html, body {
   color: white !important;
 }
 
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers content horizontally */
+  text-align: center; /* Center text */
+  padding: 5%; /* Adjust padding for better balance */
+}
 
+.socials {
+  list-style: none;
+  display: flex;
+  gap: 20px; /* Use a smaller gap to evenly space links */
+  padding: 0;
+  margin: 0;
+}
+
+.attribution {
+  margin-top: 10;
+}
 
 .hero {
   width: 100%;
@@ -83,7 +107,6 @@ html, body {
   margin: 10px 0 0;
 }
 
-
 .intro {
   text-align: center;
   margin: 20px auto;
@@ -91,14 +114,13 @@ html, body {
   font-size: 1.1rem;
 }
 
-
 .query-boxes {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   border: 2px;
-  border-color: red;
+
 }
 
 .query-box {
@@ -117,8 +139,4 @@ html, body {
   font-size: 1rem;
   cursor: pointer;
 }
-
-
-
-
 </style>

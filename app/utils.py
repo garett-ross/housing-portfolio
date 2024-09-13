@@ -17,9 +17,10 @@ def import_csv():
         df = pd.read_csv('all_ppd_from_df.csv')
         df['date'] = pd.to_datetime(df['date']).dt.date
         print("Fetched data local file, adding to database")
-
+    df = df.loc[df['date'] >= date(2018,1,1)]
     counter = 0
     for index, row in df.iterrows():
+
         record = PPD(
             utr=row['utr'],
             price=row['price'],
@@ -39,6 +40,8 @@ def import_csv():
             record_status=row['record_status']
         )
         db.session.add(record)
+
+        db.session.commit()
         counter += 1
         print(f'Added {counter} records')
-    db.session.commit()
+
