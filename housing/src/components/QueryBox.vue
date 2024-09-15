@@ -85,7 +85,7 @@ export default {
       }, {});
 
       try {
-        const response = await fetch('http://localhost:5000/unique', {
+        const response = await fetch('/unique', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ export default {
       const isEmptyQuery = Object.keys(query).length === 0;
 
       if (isEmptyQuery) {
-        fetch('http://localhost:5000/api', {
+        fetch('/api', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -140,7 +140,7 @@ export default {
             console.error('Error fetching data (GET request):', error);
           });
       } else {
-        fetch('http://localhost:5000/api', {
+        fetch('/api', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
