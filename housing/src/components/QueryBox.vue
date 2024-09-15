@@ -30,15 +30,15 @@
           <option value="le">Less Than or Equal To</option>
         </select>
 
-        <!-- Filter options (dynamically populated based on previous filters) -->
+        <!-- Filter options -->
         <select v-if="filter.options.length && !isFreeTextFilter(filter.field)" v-model="filter.value">
           <option v-for="option in filter.options" :key="option" :value="option">{{ option }}</option>
         </select>
 
-        <!-- Date Picker for Date Field -->
+
         <input v-if="filter.field === 'date'" v-model="filter.value" type="date" />
 
-        <!-- For price, use free-text input -->
+
         <input v-if="filter.field === 'price'" v-model="filter.value" type="text" placeholder="Enter Price" />
 
         <button @click.prevent="removeFilter(index)">Remove</button>

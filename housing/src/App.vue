@@ -89,7 +89,6 @@ html, body {
 
 .hero {
   width: 100%;
-  background-image: url('path-to-your-banner-image.jpg');
   background-size: cover;
   background-position: center;
   color: white;
