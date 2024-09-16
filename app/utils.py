@@ -9,14 +9,14 @@ utils = Blueprint('cli',__name__,cli_group='utils')
 
 @utils.cli.command('import')
 def import_csv():
-    try:
-        df = pd.read_csv('http://prod.publicdata.landregistry.gov.uk.s3-website-eu-west-1.amazonaws.com/pp-complete.csv').tail(10000)
-        df['date'] = pd.to_datetime(df['date']).dt.date
-        print("Fetched data from web, adding to database")
-    except:
-        df = pd.read_csv('all_ppd_from_df.csv')
-        df['date'] = pd.to_datetime(df['date']).dt.date
-        print("Fetched data local file, adding to database")
+    #try:
+    df = pd.read_csv('http://prod.publicdata.landregistry.gov.uk.s3-website-eu-west-1.amazonaws.com/pp-complete.csv')
+    df['date'] = pd.to_datetime(df['date']).dt.date
+    print("Fetched data from web, adding to database")
+    #except:
+    #    df = pd.read_csv('all_ppd_from_df.csv')
+    #    df['date'] = pd.to_datetime(df['date']).dt.date
+    #    print("Fetched data local file, adding to database")
     df = df.loc[df['date'] >= date(2018,1,1)]
     counter = 0
     for index, row in df.iterrows():
