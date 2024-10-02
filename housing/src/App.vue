@@ -25,7 +25,7 @@
       <li class="social"><a href="https://github.com/garett-ross">GitHub</a></li>
       </ul>
       <br>
-      <p class="attribution">Price Paid data copyright HM Government, published for educational purposes under the Open Govenment Licence</p>
+      <p class="attribution">Price Paid data copyright HM Government, published for educational purposes under the Open Government Licence</p>
       
     </div>
   </div>

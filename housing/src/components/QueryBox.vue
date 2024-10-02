@@ -49,6 +49,8 @@
       </div>
     </form>
 
+
+
     <div v-if="averages.length > 0">
       <h3>Filtered Data Chart</h3>
       <div ref="chart"></div>
@@ -68,9 +70,15 @@ export default {
   data() {
     return {
       filters: [],
-      averages: [] // To store monthly averages
+      averages: [], // To store monthly averages
+      apiURL: ''
     };
   },
+
+  created() {
+    this.apiURL = import.meta.env.VITE_API_URL
+  },
+
   methods: {
     isFreeTextFilter(field) {
       return field === 'price' || field === 'date';
@@ -85,7 +93,7 @@ export default {
       }, {});
 
       try {
-        const response = await fetch('/unique', {
+        const response = await fetch(`${this.apiURL}/unique`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -126,7 +134,7 @@ export default {
       const isEmptyQuery = Object.keys(query).length === 0;
 
       if (isEmptyQuery) {
-        fetch('/api', {
+        fetch(`${this.apiURL}/api`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -140,7 +148,7 @@ export default {
             console.error('Error fetching data (GET request):', error);
           });
       } else {
-        fetch('/api', {
+        fetch(`${this.apiURL}/api`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -191,7 +199,7 @@ export default {
       if (this.averages && this.averages.length > 0) { 
         const layout = {
           grid: { rows: 2, columns: 1, pattern: 'independent' },
-          xaxis: { title: 'Month' },  // X-axis title for scatter plot
+          xaxis: { title: 'Date' },  // X-axis title for scatter plot
           yaxis: { title: 'Average Price' },  // Y-axis title for scatter plot
           xaxis2: { title: 'Price' },  // X-axis title for histogram
           yaxis2: { title: 'Count' },  // Y-axis title for histogram
